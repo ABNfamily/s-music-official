@@ -1,814 +1,505 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
-  >
-
-  <meta name="theme-color" content="#73152a">
-
-  <meta
-    name="description"
-    content="S MUSIC OFFICIAL — Original Music, Songs, Visuals and Releases."
-  >
-
-  <title>S MUSIC OFFICIAL</title>
-
-  <!-- IMPORTANT: GitHub Pages project path -->
-  <link rel="stylesheet" href="./style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#73152a">
+<meta name="description" content="S MUSIC OFFICIAL — Original Music, Songs, Visuals and Releases.">
+<title>S MUSIC OFFICIAL</title>
+<link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
 
-  <!-- Background texture -->
-  <div class="grain"></div>
+<div class="grain"></div>
 
+<header class="topbar">
 
-  <!-- =========================
-       HEADER
-  ========================== -->
+<a class="brand" href="#home">
+<span class="logo-mark" id="logoBox">S</span>
+<span>
+<b>S MUSIC</b>
+<small>OFFICIAL</small>
+</span>
+</a>
 
-  <header class="topbar">
+<nav id="nav">
+<a href="#home">Home</a>
+<a href="#music">Music</a>
+<a href="#downloads">Downloads</a>
+<a href="#updates">Updates</a>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+<a href="./admin.html">Admin</a>
+</nav>
 
-    <a class="brand" href="#home">
+<button class="menu" id="menu">☰</button>
 
-      <span id="logoBox" class="logo-mark">
-        S
-      </span>
+</header>
 
-      <span>
-        <b>S MUSIC</b>
-        <small>OFFICIAL</small>
-      </span>
+<div class="ticker">
+<div id="tickerText">
+NEW MUSIC • NEW VIBES • S MUSIC OFFICIAL •
+</div>
+</div>
 
-    </a>
+<main>
 
+<!-- HERO -->
 
-    <nav id="nav">
+<section id="home" class="hero">
 
-      <a href="#home">Home</a>
+<div class="hero-copy">
 
-      <a href="#music">Music</a>
+<p class="eyebrow">
+🇱🇰 SRI LANKA • OFFICIAL MUSIC LABEL
+</p>
 
-      <a href="#downloads">Downloads</a>
+<h1>
+Feel the <em>music.</em><br>
+Live the moment.
+</h1>
 
-      <a href="#updates">Updates</a>
+<p class="lead">
+Original songs, cinematic visuals, releases and new sounds —
+all from S MUSIC OFFICIAL.
+</p>
 
-      <a href="#about">About</a>
+<div class="actions">
 
-      <a href="#contact">Contact</a>
+<a class="btn primary" href="#music">
+Explore Music ↗
+</a>
 
-      <a href="#admin">Admin</a>
+<a
+class="btn ghost"
+id="ytChannel"
+target="_blank"
+rel="noopener">
+YouTube Channel ▶
+</a>
 
-    </nav>
+</div>
 
+<div class="stats">
 
-    <!-- Mobile menu -->
+<div>
+<strong id="songCount">0</strong>
+<span>Tracks</span>
+</div>
 
-    <button
-      class="menu"
-      id="menu"
-      type="button"
-      aria-label="Open menu"
-    >
-      ☰
-    </button>
+<div>
+<strong id="albumCount">0</strong>
+<span>Album Songs</span>
+</div>
 
-  </header>
+<div>
+<strong>∞</strong>
+<span>Vibes</span>
+</div>
 
+</div>
 
+</div>
 
-  <!-- =========================
-       MARQUEE / ANNOUNCEMENT
-  ========================== -->
+<div class="hero-art">
 
-  <div class="ticker">
+<div class="vinyl">
+<span id="heroLogo">SM</span>
+</div>
 
-    <div id="tickerText">
-      NEW MUSIC • NEW VIBES • S MUSIC OFFICIAL •
-    </div>
+<div class="ring r1"></div>
+<div class="ring r2"></div>
 
-  </div>
+</div>
 
+</section>
 
 
-  <!-- =========================
-       MAIN
-  ========================== -->
+<!-- RECENT -->
 
-  <main>
+<section id="featured" class="section">
 
+<div class="section-head">
 
-    <!-- =========================
-         HOME / HERO
-    ========================== -->
+<div>
+<p class="eyebrow">JUST IN</p>
+<h2>Recently <span>Uploaded</span></h2>
+</div>
 
-    <section
-      id="home"
-      class="hero"
-    >
+<a href="#music" class="text-link">
+All music →
+</a>
 
-      <div class="hero-copy">
+</div>
 
-        <p class="eyebrow">
-          🇱🇰 SRI LANKA • OFFICIAL MUSIC LABEL
-        </p>
+<div id="recent" class="swipe-row"></div>
 
+</section>
 
-        <h1>
-          Feel the <em>music.</em><br>
-          Live the moment.
-        </h1>
 
+<!-- RELEASE -->
 
-        <p class="lead">
-          Original songs, cinematic visuals, releases and new sounds —
-          all from S MUSIC OFFICIAL.
-        </p>
+<section id="releaseHero" class="release-banner">
 
+<div>
 
-        <div class="actions">
+<p class="eyebrow">
+NEXT RELEASE
+</p>
 
-          <a
-            class="btn primary"
-            href="#music"
-          >
-            Explore Music ↗
-          </a>
+<h2 id="releaseTitle">
+MARAYUM ETHIROZHI
+</h2>
 
+<p id="releaseLine">
+Releasing 01 September 2026 • 4:00 PM
+</p>
 
-          <a
-            class="btn ghost"
-            id="ytChannel"
-            href="#"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            YouTube Channel ▶
-          </a>
+</div>
 
-        </div>
+<div class="countdown">
 
+<div>
+<b id="dd">00</b>
+<small>Days</small>
+</div>
 
-        <!-- Statistics -->
+<i>:</i>
 
-        <div class="stats">
+<div>
+<b id="hh">00</b>
+<small>Hours</small>
+</div>
 
-          <div>
-            <strong id="songCount">0</strong>
-            <span>Tracks</span>
-          </div>
+<i>:</i>
 
+<div>
+<b id="mm">00</b>
+<small>Min</small>
+</div>
 
-          <div>
-            <strong id="albumCount">0</strong>
-            <span>Album Songs</span>
-          </div>
+<i>:</i>
 
+<div>
+<b id="ss">00</b>
+<small>Sec</small>
+</div>
 
-          <div>
-            <strong>∞</strong>
-            <span>Vibes</span>
-          </div>
+</div>
 
-        </div>
+<a
+id="releaseAction"
+class="btn primary"
+href="#music">
+View release
+</a>
 
-      </div>
+</section>
 
 
+<!-- ALBUM -->
 
-      <!-- Hero vinyl -->
+<section id="music" class="section">
 
-      <div class="hero-art">
+<div class="section-head">
 
-        <div class="vinyl">
+<div>
+<p class="eyebrow">
+THE CATALOGUE
+</p>
 
-          <span id="heroLogo">
-            SM
-          </span>
+<h2>
+Our Album <span>Songs</span>
+</h2>
 
-        </div>
+</div>
 
+<div class="chips">
 
-        <div class="ring r1"></div>
+<button class="chip active" data-filter="all">
+All
+</button>
 
-        <div class="ring r2"></div>
+<button class="chip" data-filter="released">
+Released
+</button>
 
-      </div>
+<button class="chip" data-filter="upcoming">
+Upcoming
+</button>
 
-    </section>
+</div>
 
+</div>
 
+<div id="albumSongs" class="song-grid"></div>
 
-    <!-- =========================
-         RECENTLY UPLOADED
-    ========================== -->
+</section>
 
-    <section
-      id="featured"
-      class="section"
-    >
 
-      <div class="section-head">
+<!-- FILM -->
 
-        <div>
+<section id="film" class="section alt">
 
-          <p class="eyebrow">
-            JUST IN
-          </p>
+<div class="section-head">
 
-          <h2>
-            Recently <span>Uploaded</span>
-          </h2>
+<div>
 
-        </div>
+<p class="eyebrow">
+SOUNDTRACKS
+</p>
 
+<h2>
+Film <span>Songs</span>
+</h2>
 
-        <a
-          href="#music"
-          class="text-link"
-        >
-          All music →
-        </a>
+</div>
 
-      </div>
+</div>
 
+<div id="filmSongs" class="song-grid"></div>
 
-      <!-- Horizontal swipe area -->
+</section>
 
-      <div
-        id="recent"
-        class="swipe-row"
-      ></div>
 
-    </section>
+<!-- DOWNLOAD -->
 
+<section id="downloads" class="section">
 
+<div class="section-head">
 
-    <!-- =========================
-         NEXT RELEASE
-    ========================== -->
+<div>
 
-    <section
-      id="releaseHero"
-      class="release-banner"
-    >
+<p class="eyebrow">
+OFFLINE LISTENING
+</p>
 
-      <div>
+<h2>
+MP3 <span>Downloads</span>
+</h2>
 
-        <p class="eyebrow">
-          NEXT RELEASE
-        </p>
+</div>
 
+</div>
 
-        <h2 id="releaseTitle">
-          MARAYUM ETHIROZHI
-        </h2>
+<div id="downloadList" class="download-list"></div>
 
+</section>
 
-        <p id="releaseLine">
-          Tomorrow • 4:00 PM
-        </p>
 
-      </div>
+<!-- UPDATES -->
 
+<section id="updates" class="section">
 
-      <!-- Countdown -->
+<div class="section-head">
 
-      <div class="countdown">
+<div>
 
-        <div>
+<p class="eyebrow">
+WHAT'S NEW
+</p>
 
-          <b id="dd">
-            00
-          </b>
+<h2>
+Latest <span>Updates</span>
+</h2>
 
-          <small>
-            Days
-          </small>
+</div>
 
-        </div>
+</div>
 
+<div id="updatesList" class="update-list"></div>
 
-        <i>:</i>
+</section>
 
 
-        <div>
+<!-- ABOUT -->
 
-          <b id="hh">
-            00
-          </b>
+<section id="about" class="about">
 
-          <small>
-            Hours
-          </small>
+<div>
 
-        </div>
+<p class="eyebrow">
+ABOUT S MUSIC
+</p>
 
+<h2>
+More than a label.<br>
+<span>A music world.</span>
+</h2>
 
-        <i>:</i>
+</div>
 
+<p id="aboutText">
+S MUSIC OFFICIAL is a home for original music,
+artists, visual stories and new sounds.
+Discover releases, stream music,
+watch official visuals and download available tracks.
+</p>
 
-        <div>
+</section>
 
-          <b id="mm">
-            00
-          </b>
 
-          <small>
-            Min
-          </small>
+<!-- CONTACT -->
 
-        </div>
+<section id="contact" class="section contact">
 
+<div class="contact-card">
 
-        <i>:</i>
+<p class="eyebrow">
+STAY CONNECTED
+</p>
 
+<h2>
+Never miss a release.
+</h2>
 
-        <div>
+<p>
+Follow S MUSIC OFFICIAL for new songs,
+visuals and announcements.
+</p>
 
-          <b id="ss">
-            00
-          </b>
+<div class="contact-links">
 
-          <small>
-            Sec
-          </small>
+<a id="emailLink"></a>
 
-        </div>
+<a
+id="waLink"
+target="_blank"
+rel="noopener">
+</a>
 
-      </div>
+</div>
 
+<a
+class="btn primary"
+id="yt2"
+target="_blank"
+rel="noopener">
+Subscribe on YouTube ▶
+</a>
 
-      <a
-        id="releaseAction"
-        class="btn primary"
-        href="#music"
-      >
-        View release
-      </a>
+</div>
 
-    </section>
+</section>
 
 
+<!-- ADMIN -->
 
-    <!-- =========================
-         ALBUM SONGS
-    ========================== -->
+<section class="admin-entry">
 
-    <section
-      id="music"
-      class="section"
-    >
+<div>
 
-      <div class="section-head">
+<p class="eyebrow">
+CREATOR ACCESS
+</p>
 
-        <div>
+<h2>
+Manage S MUSIC
+</h2>
 
-          <p class="eyebrow">
-            THE CATALOGUE
-          </p>
+<p>
+Admin access is protected by your private 6-digit PIN.
+</p>
 
+</div>
 
-          <h2>
-            Our Album <span>Songs</span>
-          </h2>
+<a
+class="btn primary"
+href="./admin.html">
+Open Admin →
+</a>
 
-        </div>
+</section>
 
+</main>
 
-        <div class="chips">
 
-          <button
-            class="chip active"
-            data-filter="all"
-            type="button"
-          >
-            All
-          </button>
+<!-- PLAYER -->
 
+<section class="player" id="player">
 
-          <button
-            class="chip"
-            data-filter="released"
-            type="button"
-          >
-            Released
-          </button>
+<div class="player-art">
+<span>SM</span>
+</div>
 
+<div class="player-info">
 
-          <button
-            class="chip"
-            data-filter="upcoming"
-            type="button"
-          >
-            Upcoming
-          </button>
+<small id="playerArtist">
+S MUSIC OFFICIAL
+</small>
 
-        </div>
+<strong id="playerTitle">
+Choose a song
+</strong>
 
-      </div>
+<div class="progress">
+<i id="progress"></i>
+</div>
 
+</div>
 
-      <div
-        id="albumSongs"
-        class="song-grid"
-      ></div>
+<button id="prev" class="player-btn">
+⏮
+</button>
 
-    </section>
+<button id="playPause" class="player-btn big">
+▶
+</button>
 
+<button id="next" class="player-btn">
+⏭
+</button>
 
+<audio
+id="audio"
+preload="metadata">
+</audio>
 
-    <!-- =========================
-         FILM SONGS
-    ========================== -->
+<button
+class="close-player"
+id="closePlayer">
+×
+</button>
 
-    <section
-      id="film"
-      class="section alt"
-    >
+</section>
 
-      <div class="section-head">
 
-        <div>
+<footer>
 
-          <p class="eyebrow">
-            SOUNDTRACKS
-          </p>
+<div class="footer-brand">
 
+<span class="logo-mark small">
+S
+</span>
 
-          <h2>
-            Film <span>Songs</span>
-          </h2>
+<b>S MUSIC OFFICIAL</b>
 
-        </div>
+</div>
 
-      </div>
+<p>
+© 2026 S MUSIC OFFICIAL. All rights reserved.
+</p>
 
+<div>
 
-      <div
-        id="filmSongs"
-        class="song-grid"
-      ></div>
+<a
+id="footerSite"
+target="_blank">
+Website
+</a>
 
-    </section>
+·
 
+<a href="#contact">
+Contact
+</a>
 
+</div>
 
-    <!-- =========================
-         MP3 DOWNLOADS
-    ========================== -->
+</footer>
 
-    <section
-      id="downloads"
-      class="section"
-    >
-
-      <div class="section-head">
-
-        <div>
-
-          <p class="eyebrow">
-            OFFLINE LISTENING
-          </p>
-
-
-          <h2>
-            MP3 <span>Downloads</span>
-          </h2>
-
-        </div>
-
-      </div>
-
-
-      <div
-        id="downloadList"
-        class="download-list"
-      ></div>
-
-    </section>
-
-
-
-    <!-- =========================
-         UPDATES
-    ========================== -->
-
-    <section
-      id="updates"
-      class="section"
-    >
-
-      <div class="section-head">
-
-        <div>
-
-          <p class="eyebrow">
-            WHAT'S NEW
-          </p>
-
-
-          <h2>
-            Latest <span>Updates</span>
-          </h2>
-
-        </div>
-
-      </div>
-
-
-      <div
-        id="updatesList"
-        class="update-list"
-      ></div>
-
-    </section>
-
-
-
-    <!-- =========================
-         ABOUT
-    ========================== -->
-
-    <section
-      id="about"
-      class="about"
-    >
-
-      <div>
-
-        <p class="eyebrow">
-          ABOUT S MUSIC
-        </p>
-
-
-        <h2>
-          More than a label.<br>
-          <span>A music world.</span>
-        </h2>
-
-      </div>
-
-
-      <p id="aboutText">
-        S MUSIC OFFICIAL is a home for original music,
-        artists, visual stories and new sounds.
-        Discover releases, stream music, watch official
-        visuals and download available tracks.
-      </p>
-
-    </section>
-
-
-
-    <!-- =========================
-         CONTACT
-    ========================== -->
-
-    <section
-      id="contact"
-      class="section contact"
-    >
-
-      <div class="contact-card">
-
-        <p class="eyebrow">
-          STAY CONNECTED
-        </p>
-
-
-        <h2>
-          Never miss a release.
-        </h2>
-
-
-        <p>
-          Follow S MUSIC OFFICIAL for new songs,
-          visuals and announcements.
-        </p>
-
-
-        <div class="contact-links">
-
-          <a
-            id="emailLink"
-            href="#"
-          ></a>
-
-
-          <a
-            id="waLink"
-            href="#"
-            target="_blank"
-            rel="noopener noreferrer"
-          ></a>
-
-        </div>
-
-
-        <a
-          class="btn primary"
-          id="yt2"
-          href="#"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Subscribe on YouTube ▶
-        </a>
-
-      </div>
-
-    </section>
-
-
-
-    <!-- =========================
-         ADMIN
-    ========================== -->
-
-    <section
-      id="admin"
-      class="admin-entry"
-    >
-
-      <div>
-
-        <p class="eyebrow">
-          CREATOR ACCESS
-        </p>
-
-
-        <h2>
-          Manage S MUSIC
-        </h2>
-
-
-        <p>
-          Admin access is protected by your private
-          6-digit PIN.
-        </p>
-
-      </div>
-
-
-      <button
-        class="btn primary"
-        id="adminBtn"
-        type="button"
-      >
-        Open Admin →
-      </button>
-
-    </section>
-
-  </main>
-
-
-
-  <!-- =========================
-       PERSISTENT MUSIC PLAYER
-  ========================== -->
-
-  <section
-    class="player"
-    id="player"
-  >
-
-    <div class="player-art">
-
-      <span>
-        SM
-      </span>
-
-    </div>
-
-
-    <div class="player-info">
-
-      <small id="playerArtist">
-        S MUSIC OFFICIAL
-      </small>
-
-
-      <strong id="playerTitle">
-        Choose a song
-      </strong>
-
-
-      <div class="progress">
-
-        <i id="progress"></i>
-
-      </div>
-
-    </div>
-
-
-    <button
-      id="prev"
-      class="player-btn"
-      type="button"
-      aria-label="Previous song"
-    >
-      ⏮
-    </button>
-
-
-    <button
-      id="playPause"
-      class="player-btn big"
-      type="button"
-      aria-label="Play or pause"
-    >
-      ▶
-    </button>
-
-
-    <button
-      id="next"
-      class="player-btn"
-      type="button"
-      aria-label="Next song"
-    >
-      ⏭
-    </button>
-
-
-    <audio
-      id="audio"
-      preload="metadata"
-    ></audio>
-
-
-    <button
-      class="close-player"
-      id="closePlayer"
-      type="button"
-      aria-label="Close player"
-    >
-      ×
-    </button>
-
-  </section>
-
-
-
-  <!-- =========================
-       FOOTER
-  ========================== -->
-
-  <footer>
-
-    <div class="footer-brand">
-
-      <span class="logo-mark small">
-        S
-      </span>
-
-
-      <b>
-        S MUSIC OFFICIAL
-      </b>
-
-    </div>
-
-
-    <p>
-      © 2026 S MUSIC OFFICIAL.
-      All rights reserved.
-    </p>
-
-
-    <div>
-
-      <a
-        id="footerSite"
-        href="#"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Website
-      </a>
-
-      ·
-
-      <a href="#contact">
-        Contact
-      </a>
-
-    </div>
-
-  </footer>
-
-
-
-  <!-- IMPORTANT: GitHub Pages project path -->
-
-  <script src="./app.js"></script>
+<script src="./app.js"></script>
 
 </body>
-                                      </html>
+  </html>
