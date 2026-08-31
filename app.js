@@ -1,23 +1,733 @@
-const $=s=>document.querySelector(s);let songs=[],updates=[],settings={},queue=[],idx=-1;
-const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const releaseAt=s=>new Date(`${s.releaseDate}T${s.releaseTime||'00:00'}:00+05:30`);
-function released(s){return Date.now()>=releaseAt(s).getTime()}
-function age(s){const ms=Date.now()-releaseAt(s).getTime();if(ms<0)return '';return `${Math.floor(ms/86400000)} day${Math.floor(ms/86400000)===1?'':'s'} ago`}
-async function load(){const d=await fetch('/api/site').then(r=>r.json());settings=d.settings;songs=d.songs;updates=d.updates;document.title=settings.brand||'S MUSIC OFFICIAL';
- $('#tickerText').textContent=(settings.announcement+' • ').repeat(4);setLink('#ytChannel',settings.youtubeChannel);setLink('#yt2',settings.youtubeChannel);if(settings.websiteUrl)setLink('#footerSite',settings.websiteUrl);else $('#footerSite').removeAttribute('href');
- $('#songCount').textContent=songs.length;$('#albumCount').textContent=songs.filter(s=>s.category==='album').length;setContact();renderRecent();renderCatalog();renderUpdates();renderDownloads();setupRelease();if(settings.logo){$('#logoBox').innerHTML=`<img src="${esc(settings.logo)}" alt="S Music logo">`;$('#heroLogo').textContent='';}}
-function setLink(sel,url){if(url)$(sel).href=url}
-function setContact(){let e=settings.email||'darkmusic101012@gmail.com',w=settings.whatsapp||'+94777990902';$('#emailLink').textContent=e;$('#emailLink').href='mailto:'+e;$('#waLink').textContent=w+' (WhatsApp only)';$('#waLink').href='https://wa.me/'+w.replace(/\D/g,'')}
-function card(s){let isRel=released(s), status=isRel?'Released': 'Releasing '+formatDate(releaseAt(s));return `<article class="song-card"><div class="cover"><span>${s.cover?`<img src="${esc(s.cover)}" alt="${esc(s.title)} cover">`:'SM'}</span><b>${isRel?'RELEASED':'UPCOMING'}</b></div><div class="song-meta"><div class="meta-top"><small>${esc(s.albumLabel||'S MUSIC')} • ${esc(s.artist||'AB ROCKERZ')}</small><small>${isRel?age(s):formatDate(releaseAt(s))}</small></div><h3>${esc(s.title)}</h3><p>${esc(s.description||'Original music from S MUSIC OFFICIAL.')}</p><div class="song-buttons">${s.mp3?`<button class="mini play" data-id="${esc(s.id)}">▶ Play</button><a class="mini" href="${esc(s.mp3)}" download>↓ MP3</a>`:''}${s.youtube&&isRel?`<a class="mini" href="${esc(s.youtube)}" target="_blank">YouTube ↗</a>`:''}</div></div></article>`}
-function renderRecent(){let arr=[...songs].sort((a,b)=>releaseAt(b)-releaseAt(a));$('#recent').innerHTML=arr.map(card).join('');bindPlay($('#recent'))}
-function renderCatalog(filter='all'){let arr=songs.filter(s=>s.category==='album').filter(s=>filter==='all'||(filter==='released'?released(s):!released(s)));$('#albumSongs').innerHTML=arr.map(card).join('');bindPlay($('#albumSongs'))}
-function renderUpdates(){$('#updatesList').innerHTML=updates.sort((a,b)=>new Date(b.date)-new Date(a.date)).map(u=>`<article class="update"><time>${esc(u.date)} • ${esc(u.tag||'UPDATE')}</time><h3>${esc(u.title)}</h3><p>${esc(u.body||'')}</p></article>`).join('')||'<p class="muted">No updates yet.</p>'}
-function renderDownloads(){let a=songs.filter(s=>s.mp3&&released(s));$('#downloadList').innerHTML=a.length?a.map(s=>`<div class="download-row"><div><small>${esc(s.artist||'AB ROCKERZ')}</small><strong>${esc(s.title)}</strong></div><div><button class="mini play" data-id="${esc(s.id)}">▶</button><a class="mini" href="${esc(s.mp3)}" download>Download MP3 ↓</a></div></div>`).join(''):'<div class="empty">MP3 downloads will appear here when tracks are uploaded by S MUSIC admin.</div>';bindPlay($('#downloadList'))}
-function bindPlay(root){root.querySelectorAll('[data-id]').forEach(b=>b.onclick=()=>playId(b.dataset.id))}
-function playId(id){idx=queue.findIndex(s=>s.id===id);if(idx<0){queue=songs.filter(s=>s.mp3&&released(s));idx=queue.findIndex(s=>s.id===id)}if(idx<0)return;loadTrack()}
-function loadTrack(){let s=queue[idx];if(!s)return;$('#audio').src=s.mp3;$('#playerTitle').textContent=s.title;$('#playerArtist').textContent=s.artist||'S MUSIC OFFICIAL';$('#player').classList.add('show');$('#audio').play();$('#playPause').textContent='❚❚';localStorage.setItem('smusic-last',s.id)}
-$('#playPause').onclick=()=>{if($('#audio').paused){$('#audio').play();$('#playPause').textContent='❚❚'}else{$('#audio').pause();$('#playPause').textContent='▶'}};
-$('#prev').onclick=()=>{if(queue.length){idx=(idx-1+queue.length)%queue.length;loadTrack()}};$('#next').onclick=()=>{if(queue.length){idx=(idx+1)%queue.length;loadTrack()}};$('#audio').onended=()=>{if(queue.length){idx=(idx+1)%queue.length;loadTrack()}};$('#audio').ontimeupdate=()=>$('#progress').style.width=((($('#audio').currentTime/$('#audio').duration)*100)||0)+'%';$('#closePlayer').onclick=()=>$('#player').classList.remove('show');
-function formatDate(d){return d.toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',hour12:true,timeZone:'Asia/Colombo'})}
-function setupRelease(){let s=songs.filter(x=>x.id==='marayum-ethirozhi')[0]||songs.find(x=>!released(x));if(!s)return;$('#releaseTitle').textContent=s.title;let target=releaseAt(s);function tick(){let diff=target-Date.now();if(diff<=0){$('#releaseLine').textContent='RELEASED • September 1, 2026 • 4:00 PM';['dd','hh','mm','ss'].forEach(x=>$('#'+x).textContent='00');$('#releaseAction').textContent=s.youtube?'Watch now ↗':'Released — add links in Admin';if(s.youtube)$('#releaseAction').href=s.youtube;return}let sec=Math.floor(diff/1000),d=Math.floor(sec/86400);sec%=86400;let h=Math.floor(sec/3600);sec%=3600;let m=Math.floor(sec/60);sec%=60;$('#dd').textContent=String(d).padStart(2,'0');$('#hh').textContent=String(h).padStart(2,'0');$('#mm').textContent=String(m).padStart(2,'0');$('#ss').textContent=String(sec).padStart(2,'0');$('#releaseLine').textContent='Releasing '+formatDate(target)+' • Sri Lanka time'}tick();clearInterval(window.relTimer);window.relTimer=setInterval(tick,1000)}
-document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));c.classList.add('active');renderCatalog(c.dataset.filter)});$('#menu').onclick=()=>{let n=$('#nav');n.classList.toggle('open')};document.querySelectorAll('#nav a').forEach(a=>a.onclick=()=>$('#nav').classList.remove('open'));$('#adminBtn').onclick=()=>location.href='/admin.html';load().catch(console.error);
+const API = "./api";
+
+let siteData = {
+  settings: {
+    brand: "S MUSIC",
+    tagline: "OFFICIAL",
+    country: "Sri Lanka",
+    youtubeChannel: "https://youtube.com/@smusic-official-25",
+    email: "darkmusic101012@gmail.com",
+    whatsapp: "+94777990902",
+    websiteUrl: "",
+    announcement: "NEW MUSIC • NEW VIBES • S MUSIC OFFICIAL •"
+  },
+  songs: [
+    {
+      id: "bad-ah-mah",
+      title: "BAD'AH MAH",
+      artist: "AB ROCKERZ",
+      category: "album",
+      albumLabel: "1st Album",
+      releaseDate: "2026-05-01",
+      releaseTime: "00:00",
+      status: "Released",
+      youtube: "https://youtu.be/rkR66Q2bkyY?si=laBVv5x1llHCzC8a",
+      mp3: "",
+      cover: ""
+    },
+    {
+      id: "ullaara-vaada",
+      title: "ULLAARA VAADA",
+      artist: "AB ROCKERZ",
+      category: "album",
+      albumLabel: "3rd Album",
+      releaseDate: "2026-06-23",
+      releaseTime: "00:00",
+      status: "Released",
+      youtube: "https://youtu.be/rxNHABZc4zU?si=ttnijvvJRlbb2D3m",
+      mp3: "",
+      cover: ""
+    },
+    {
+      id: "marayum-ethirozhi",
+      title: "MARAYUM ETHIROZHI",
+      artist: "AB ROCKERZ",
+      category: "album",
+      albumLabel: "4th Album",
+      releaseDate: "2026-09-01",
+      releaseTime: "16:00",
+      status: "Upcoming",
+      youtube: "",
+      mp3: "",
+      cover: ""
+    },
+    {
+      id: "hbd-dangera",
+      title: "HBD DANGERA (Party Song)",
+      artist: "AB ROCKERZ",
+      category: "film",
+      albumLabel: "Film Song",
+      releaseDate: "2026-08-14",
+      releaseTime: "00:00",
+      status: "Released",
+      youtube: "https://youtu.be/kWqzfwXSKVE?si=-04bB14hrzkYE_dB",
+      mp3: "",
+      cover: ""
+    }
+  ],
+  updates: []
+};
+
+let currentSongs = [];
+let currentIndex = -1;
+
+const $ = (selector) => document.querySelector(selector);
+
+function safe(value) {
+  return String(value ?? "")
+    .replace(/[&<>"']/g, (char) => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;"
+    })[char]);
+}
+
+function releaseDateTime(song) {
+  return new Date(
+    `${song.releaseDate}T${song.releaseTime || "00:00"}+05:30`
+  );
+}
+
+function isReleased(song) {
+  return releaseDateTime(song).getTime() <= Date.now();
+}
+
+function daysAgo(date) {
+  const now = new Date();
+  const then = new Date(date);
+
+  const diff = Math.floor(
+    (now - then) / (1000 * 60 * 60 * 24)
+  );
+
+  if (diff <= 0) return "Released today";
+
+  return `${diff} day${diff === 1 ? "" : "s"} ago`;
+}
+
+function youtubeLink(url) {
+  if (!url) return "";
+
+  return `
+    <a
+      class="mini"
+      href="${safe(url)}"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      YouTube ▶
+    </a>
+  `;
+}
+
+function coverHTML(song) {
+  if (song.cover) {
+    return `
+      <div class="cover">
+        <img
+          src="${safe(song.cover)}"
+          alt="${safe(song.title)}"
+        >
+        <b>${isReleased(song) ? "RELEASED" : "UPCOMING"}</b>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="cover">
+      <span>SM</span>
+      <b>${isReleased(song) ? "RELEASED" : "UPCOMING"}</b>
+    </div>
+  `;
+}
+
+function songCard(song) {
+
+  const released = isReleased(song);
+
+  const playButton = song.mp3 && released
+    ? `
+      <button
+        class="mini play"
+        onclick="playSong('${safe(song.id)}')"
+      >
+        ▶ Play
+      </button>
+    `
+    : "";
+
+  return `
+    <article class="song-card">
+
+      ${coverHTML(song)}
+
+      <div class="song-meta">
+
+        <div class="meta-top">
+
+          <small>
+            ${safe(song.albumLabel || "")}
+          </small>
+
+          <small>
+            ${
+              released
+                ? daysAgo(releaseDateTime(song))
+                : `Releases ${new Date(song.releaseDate).toLocaleDateString("en-GB")}`
+            }
+          </small>
+
+        </div>
+
+        <h3>
+          ${safe(song.title)}
+        </h3>
+
+        <p>
+          ${safe(song.artist || "S MUSIC OFFICIAL")}
+        </p>
+
+        <div class="song-buttons">
+
+          ${playButton}
+
+          ${youtubeLink(song.youtube)}
+
+        </div>
+
+      </div>
+
+    </article>
+  `;
+}
+
+function renderSongs() {
+
+  const albums = siteData.songs.filter(
+    song => song.category === "album"
+  );
+
+  const films = siteData.songs.filter(
+    song => song.category === "film"
+  );
+
+  currentSongs = [...albums, ...films];
+
+  $("#albumSongs").innerHTML =
+    albums.length
+      ? albums.map(songCard).join("")
+      : `<div class="empty">No album songs yet.</div>`;
+
+  $("#filmSongs").innerHTML =
+    films.length
+      ? films.map(songCard).join("")
+      : `<div class="empty">No film songs yet.</div>`;
+
+  $("#songCount").textContent =
+    siteData.songs.length;
+
+  $("#albumCount").textContent =
+    albums.length;
+}
+
+function renderRecent() {
+
+  const recent = [...siteData.songs]
+    .sort(
+      (a,b) =>
+        new Date(b.releaseDate) -
+        new Date(a.releaseDate)
+    )
+    .slice(0,6);
+
+  $("#recent").innerHTML =
+    recent.length
+      ? recent.map(songCard).join("")
+      : `<div class="empty">No releases yet.</div>`;
+}
+
+function renderDownloads() {
+
+  const downloadable =
+    siteData.songs.filter(
+      song => song.mp3 && isReleased(song)
+    );
+
+  if (!downloadable.length) {
+
+    $("#downloadList").innerHTML = `
+      <div class="empty">
+        MP3 downloads will appear here
+        when tracks are uploaded.
+      </div>
+    `;
+
+    return;
+  }
+
+  $("#downloadList").innerHTML =
+    downloadable.map(song => `
+      <div class="download-row">
+
+        <div>
+          <small>
+            ${safe(song.artist || "S MUSIC OFFICIAL")}
+          </small>
+
+          <strong>
+            ${safe(song.title)}
+          </strong>
+        </div>
+
+        <a
+          class="btn primary"
+          href="${safe(song.mp3)}"
+          download
+        >
+          Download MP3 ↓
+        </a>
+
+      </div>
+    `).join("");
+}
+
+function renderUpdates() {
+
+  const updates =
+    siteData.updates || [];
+
+  if (!updates.length) {
+
+    $("#updatesList").innerHTML = `
+      <div class="update">
+        <time>WELCOME</time>
+        <h3>Welcome to S MUSIC OFFICIAL</h3>
+        <p>
+          New songs, releases and music updates
+          will appear here.
+        </p>
+      </div>
+    `;
+
+    return;
+  }
+
+  $("#updatesList").innerHTML =
+    updates.map(update => `
+      <article class="update">
+
+        <time>
+          ${safe(update.date || "")}
+          •
+          ${safe(update.tag || "UPDATE")}
+        </time>
+
+        <h3>
+          ${safe(update.title)}
+        </h3>
+
+        <p>
+          ${safe(update.body)}
+        </p>
+
+      </article>
+    `).join("");
+}
+
+function updateSettings() {
+
+  const settings = siteData.settings || {};
+
+  $("#tickerText").textContent =
+    settings.announcement ||
+    "NEW MUSIC • NEW VIBES • S MUSIC OFFICIAL •";
+
+  $("#ytChannel").href =
+    settings.youtubeChannel || "#";
+
+  $("#yt2").href =
+    settings.youtubeChannel || "#";
+
+  $("#aboutText").textContent =
+    settings.aboutText ||
+    "S MUSIC OFFICIAL is a home for original music, artists, visual stories and new sounds. Discover releases, stream music, watch official visuals and download available tracks.";
+
+  $("#emailLink").textContent =
+    settings.email || "";
+
+  $("#emailLink").href =
+    settings.email
+      ? `mailto:${settings.email}`
+      : "#";
+
+  $("#waLink").textContent =
+    settings.whatsapp
+      ? `WhatsApp: ${settings.whatsapp}`
+      : "";
+
+  $("#waLink").href =
+    settings.whatsapp
+      ? `https://wa.me/${settings.whatsapp.replace(/\D/g,"")}`
+      : "#";
+
+  $("#footerSite").href =
+    settings.websiteUrl || "#";
+
+  if (settings.logo) {
+
+    $("#logoBox").innerHTML =
+      `<img src="${safe(settings.logo)}" alt="S MUSIC">`;
+
+    $("#heroLogo").textContent = "";
+
+    $("#heroLogo").innerHTML =
+      `<img src="${safe(settings.logo)}" alt="S MUSIC">`;
+  }
+}
+
+function findNextRelease() {
+
+  const upcoming =
+    siteData.songs
+      .filter(song => !isReleased(song))
+      .sort(
+        (a,b) =>
+          releaseDateTime(a) -
+          releaseDateTime(b)
+      );
+
+  return upcoming[0] || null;
+}
+
+function updateCountdown() {
+
+  const next = findNextRelease();
+
+  if (!next) {
+
+    $("#releaseTitle").textContent =
+      "NEW MUSIC SOON";
+
+    $("#releaseLine").textContent =
+      "Stay tuned for the next release.";
+
+    $("#dd").textContent = "00";
+    $("#hh").textContent = "00";
+    $("#mm").textContent = "00";
+    $("#ss").textContent = "00";
+
+    return;
+  }
+
+  const target =
+    releaseDateTime(next).getTime();
+
+  const now = Date.now();
+
+  const difference =
+    target - now;
+
+  $("#releaseTitle").textContent =
+    next.title;
+
+  if (difference <= 0) {
+
+    $("#releaseLine").textContent =
+      "RELEASED NOW • Available on S MUSIC OFFICIAL";
+
+    $("#dd").textContent = "00";
+    $("#hh").textContent = "00";
+    $("#mm").textContent = "00";
+    $("#ss").textContent = "00";
+
+    $("#releaseAction").textContent =
+      "Listen Now →";
+
+    if (next.youtube) {
+      $("#releaseAction").href =
+        next.youtube;
+    } else {
+      $("#releaseAction").href =
+        "#music";
+    }
+
+    return;
+  }
+
+  const seconds =
+    Math.floor(difference / 1000);
+
+  const days =
+    Math.floor(seconds / 86400);
+
+  const hours =
+    Math.floor((seconds % 86400) / 3600);
+
+  const minutes =
+    Math.floor((seconds % 3600) / 60);
+
+  const secs =
+    seconds % 60;
+
+  $("#dd").textContent =
+    String(days).padStart(2,"0");
+
+  $("#hh").textContent =
+    String(hours).padStart(2,"0");
+
+  $("#mm").textContent =
+    String(minutes).padStart(2,"0");
+
+  $("#ss").textContent =
+    String(secs).padStart(2,"0");
+
+  const date =
+    new Date(target);
+
+  $("#releaseLine").textContent =
+    `Releasing ${date.toLocaleDateString("en-GB",{
+      day:"2-digit",
+      month:"long",
+      year:"numeric"
+    })} • ${date.toLocaleTimeString("en-US",{
+      hour:"numeric",
+      minute:"2-digit"
+    })} Sri Lanka time`;
+
+  $("#releaseAction").textContent =
+    "View release";
+
+  $("#releaseAction").href =
+    "#music";
+}
+
+/* MUSIC PLAYER */
+
+function playSong(id) {
+
+  const index =
+    currentSongs.findIndex(
+      song => song.id === id
+    );
+
+  if (index === -1) return;
+
+  currentIndex = index;
+
+  const song =
+    currentSongs[currentIndex];
+
+  if (!song.mp3) {
+
+    if (song.youtube) {
+      window.open(
+        song.youtube,
+        "_blank"
+      );
+    }
+
+    return;
+  }
+
+  const audio =
+    $("#audio");
+
+  audio.src =
+    song.mp3;
+
+  $("#playerTitle").textContent =
+    song.title;
+
+  $("#playerArtist").textContent =
+    song.artist ||
+    "S MUSIC OFFICIAL";
+
+  $("#player").classList.add("show");
+
+  audio.play()
+    .then(() => {
+      $("#playPause").textContent =
+        "❚❚";
+    })
+    .catch(() => {
+      $("#playPause").textContent =
+        "▶";
+    });
+}
+
+function nextSong() {
+
+  if (!currentSongs.length) return;
+
+  currentIndex =
+    (currentIndex + 1) %
+    currentSongs.length;
+
+  playSong(
+    currentSongs[currentIndex].id
+  );
+}
+
+function previousSong() {
+
+  if (!currentSongs.length) return;
+
+  currentIndex =
+    (currentIndex - 1 +
+      currentSongs.length) %
+    currentSongs.length;
+
+  playSong(
+    currentSongs[currentIndex].id
+  );
+}
+
+/* MENU */
+
+$("#menu").addEventListener(
+  "click",
+  () => {
+    $("#nav").classList.toggle("open");
+  }
+);
+
+document
+  .querySelectorAll("nav a")
+  .forEach(link => {
+
+    link.addEventListener(
+      "click",
+      () => {
+        $("#nav").classList.remove("open");
+      }
+    );
+
+  });
+
+/* PLAYER CONTROLS */
+
+$("#playPause").addEventListener(
+  "click",
+  () => {
+
+    const audio = $("#audio");
+
+    if (!audio.src) return;
+
+    if (audio.paused) {
+
+      audio.play();
+
+      $("#playPause").textContent =
+        "❚❚";
+
+    } else {
+
+      audio.pause();
+
+      $("#playPause").textContent =
+        "▶";
+    }
+
+  }
+);
+
+$("#next").addEventListener(
+  "click",
+  nextSong
+);
+
+$("#prev").addEventListener(
+  "click",
+  previousSong
+);
+
+$("#closePlayer").addEventListener(
+  "click",
+  () => {
+    $("#player").classList.remove("show");
+  }
+);
+
+$("#audio").addEventListener(
+  "timeupdate",
+  () => {
+
+    const audio = $("#audio");
+
+    if (!audio.duration) return;
+
+    const percent =
+      (audio.currentTime /
+        audio.duration) *
+      100;
+
+    $("#progress").style.width =
+      `${percent}%`;
+  }
+);
+
+$("#audio").addEventListener(
+  "ended",
+  nextSong
+);
+
+/* ADMIN BUTTON */
+
+$("#adminBtn").addEventListener(
+  "click",
+  () => {
+    window.location.href =
+      "./admin.html";
+  }
+);
+
+/* LOAD */
+
+async function loadSite() {
+
+  /*
+    GitHub Pages cannot run Node API.
+    Try backend first.
+    If unavailable, use built-in data.
+  */
+
+  try {
+
+    const response =
+      await fetch(`${API}/site`);
+
+    if (!response.ok) {
+      throw new Error("API unavailable");
+    }
+
+    const data =
+      await response.json();
+
+    siteData =
+      data;
+
+  } catch(error) {
+
+    console.log(
+      "Using local S MUSIC data."
+    );
+
+  }
+
+  renderSongs();
+  renderRecent();
+  renderDownloads();
+  renderUpdates();
+  updateSettings();
+  updateCountdown();
+
+  setInterval(
+    updateCountdown,
+    1000
+  );
+}
+
+loadSite();
