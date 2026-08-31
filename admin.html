@@ -1,10 +1,971 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>S MUSIC ADMIN</title><link rel="stylesheet" href="/admin.css"></head><body><header><div><b>S MUSIC</b><span>ADMIN CONTROL</span></div><a href="/">← Website</a></header><main>
-<section id="gate" class="card"><div id="registerBox"><p class="eyebrow">FIRST-TIME SETUP</p><h1>Create Admin PIN</h1><p>Set a private 6-digit PIN. This is a one-time registration.</p><input id="reg1" inputmode="numeric" maxlength="6" placeholder="6-digit PIN" type="password"><input id="reg2" inputmode="numeric" maxlength="6" placeholder="Confirm PIN" type="password"><button onclick="registerPin()">Register PIN</button></div><div id="loginBox" hidden><p class="eyebrow">PROTECTED AREA</p><h1>Admin Login</h1><input id="pin" inputmode="numeric" maxlength="6" placeholder="6-digit PIN" type="password"><button onclick="login()">Enter Admin</button><button class="linkbtn" onclick="forgotPin()">Forgot PIN?</button></div><p id="gateMsg" class="msg"></p></section>
-<div id="panel" hidden><div class="top-actions"><h1>Control Center</h1><button class="danger" onclick="logout()">Logout</button></div>
-<section class="card"><p class="eyebrow">BRANDING & CONTACT</p><h2>Website Settings</h2><div class="grid"><label>Brand<input id="brand"></label><label>Tagline<input id="tagline"></label><label>Country<input id="country"></label><label>Announcement / marquee<input id="announcement"></label><label>YouTube channel<input id="youtubeChannel"></label><label>Website URL<input id="websiteUrl"></label><label>Email<input id="email"></label><label>WhatsApp<input id="whatsapp"></label><label class="wide">About text<textarea id="aboutText"></textarea></label></div><button onclick="saveSettings()">Save Settings</button></section>
-<section class="card"><p class="eyebrow">LOGO</p><h2>Upload Logo</h2><input id="logoFile" type="file" accept="image/*"><button onclick="uploadLogo()">Upload Logo</button><span id="logoResult"></span></section>
-<section class="card"><p class="eyebrow">MUSIC MANAGEMENT</p><h2>Add / Edit Release</h2><div class="grid"><label>ID<input id="sid" placeholder="Leave blank for new"></label><label>Title<input id="title"></label><label>Artist<input id="artist"></label><label>Category<select id="category"><option value="album">Our Album Songs</option><option value="film">Film Songs</option></select></label><label>Album label<input id="albumLabel" placeholder="4th Album / Film Songs"></label><label>Release date<input id="date" type="date"></label><label>Release time (Sri Lanka)<input id="time" type="time" value="00:00"></label><label>Status<select id="status"><option>Upcoming</option><option>Released</option></select></label><label>Cover image URL<input id="cover"></label><label>MP3 URL<input id="mp3"></label><label>YouTube URL<input id="youtube"></label><label class="wide">Description<input id="description"></label><label class="wide">Lyrics<textarea id="lyrics"></textarea></label></div><button onclick="saveSong()">Save Release</button><button class="muted" onclick="clearSong()">Clear</button></section>
-<section class="card"><h2>Upload MP3 / Image</h2><input id="mediaFile" type="file"><button onclick="uploadMedia()">Upload</button><pre id="mediaResult"></pre><small>Copy the returned URL into the song MP3 or cover field.</small></section>
-<section class="card"><h2>Current Songs</h2><div id="songs"></div></section>
-<section class="card"><p class="eyebrow">NEWS</p><h2>Post Update</h2><div class="grid"><label>Title<input id="utitle"></label><label>Date<input id="udate" type="date"></label><label>Tag<input id="utag" placeholder="NEWS / RELEASE / UPCOMING"></label><label class="wide">Body<textarea id="ubody"></textarea></label></div><button onclick="postUpdate()">Publish Update</button><div id="updates"></div></section>
-</div></main><script src="/admin.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1">
+
+<meta
+name="theme-color"
+content="#73152a">
+
+<title>S MUSIC • Admin</title>
+
+<link
+rel="stylesheet"
+href="./style.css">
+
+<style>
+
+body{
+min-height:100vh;
+}
+
+.admin-page{
+max-width:1000px;
+margin:auto;
+padding:50px 20px 100px;
+}
+
+.admin-header{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:20px;
+margin-bottom:30px;
+}
+
+.admin-header h1{
+margin:0;
+font-size:40px;
+letter-spacing:-2px;
+}
+
+.admin-card{
+padding:28px;
+margin-bottom:20px;
+border:1px solid var(--line);
+border-radius:22px;
+background:#ffffffdd;
+box-shadow:0 15px 50px #4c10260c;
+}
+
+.admin-card h2{
+margin-top:0;
+}
+
+.field{
+margin-bottom:16px;
+}
+
+.field label{
+display:block;
+margin-bottom:7px;
+font-size:11px;
+font-weight:900;
+color:var(--m);
+}
+
+.field input,
+.field textarea,
+.field select{
+width:100%;
+padding:13px 14px;
+border:1px solid #dfcbd0;
+border-radius:12px;
+outline:none;
+font:inherit;
+background:white;
+}
+
+.field textarea{
+min-height:100px;
+resize:vertical;
+}
+
+.grid2{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+}
+
+.admin-buttons{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.message{
+padding:12px;
+margin-top:15px;
+border-radius:12px;
+background:#f4e5e8;
+font-size:12px;
+}
+
+.hidden{
+display:none!important;
+}
+
+.admin-song{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:15px;
+padding:15px;
+margin-top:10px;
+border:1px solid var(--line);
+border-radius:14px;
+background:white;
+}
+
+.admin-song small{
+display:block;
+color:var(--muted);
+}
+
+@media(max-width:600px){
+
+.grid2{
+grid-template-columns:1fr;
+}
+
+.admin-header{
+align-items:flex-start;
+flex-direction:column;
+}
+
+.admin-header h1{
+font-size:32px;
+}
+
+.admin-song{
+align-items:flex-start;
+flex-direction:column;
+}
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="grain"></div>
+
+
+<div class="admin-page">
+
+
+<div class="admin-header">
+
+<div>
+
+<p class="eyebrow">
+S MUSIC OFFICIAL
+</p>
+
+<h1>
+Admin Panel
+</h1>
+
+</div>
+
+<a
+href="./index.html"
+class="btn ghost">
+← Website
+</a>
+
+</div>
+
+
+<!-- PIN -->
+
+<section
+class="admin-card"
+id="pinCard">
+
+<h2>
+Admin Security
+</h2>
+
+<p>
+Set your 6-digit admin PIN.
+</p>
+
+
+<div
+id="registerBox">
+
+<div class="field">
+
+<label>
+CREATE 6-DIGIT PIN
+</label>
+
+<input
+id="newPin"
+type="password"
+inputmode="numeric"
+maxlength="6"
+placeholder="••••••">
+
+</div>
+
+
+<div class="field">
+
+<label>
+CONFIRM PIN
+</label>
+
+<input
+id="confirmPin"
+type="password"
+inputmode="numeric"
+maxlength="6"
+placeholder="••••••">
+
+</div>
+
+
+<button
+class="btn primary"
+id="registerBtn">
+Register PIN
+</button>
+
+</div>
+
+
+<div
+id="loginBox"
+class="hidden">
+
+<div class="field">
+
+<label>
+ENTER ADMIN PIN
+</label>
+
+<input
+id="loginPin"
+type="password"
+inputmode="numeric"
+maxlength="6"
+placeholder="••••••">
+
+</div>
+
+
+<div class="admin-buttons">
+
+<button
+class="btn primary"
+id="loginBtn">
+Unlock Admin
+</button>
+
+<button
+class="btn ghost"
+id="forgotBtn">
+Forgot PIN?
+</button>
+
+</div>
+
+</div>
+
+
+<div
+class="message"
+id="pinMessage">
+</div>
+
+</section>
+
+
+<!-- DASHBOARD -->
+
+<section
+class="admin-card hidden"
+id="dashboard">
+
+
+<h2>
+S MUSIC Dashboard
+</h2>
+
+<p>
+Manage releases and website information.
+</p>
+
+
+<button
+class="btn ghost"
+id="logoutBtn">
+Lock Admin
+</button>
+
+
+<hr>
+
+
+<h2>
+Add New Release
+</h2>
+
+
+<div class="grid2">
+
+
+<div class="field">
+
+<label>
+SONG TITLE
+</label>
+
+<input
+id="songTitle"
+placeholder="Song name">
+
+</div>
+
+
+<div class="field">
+
+<label>
+ARTIST
+</label>
+
+<input
+id="songArtist"
+value="AB ROCKERZ">
+
+</div>
+
+
+<div class="field">
+
+<label>
+CATEGORY
+</label>
+
+<select id="songCategory">
+
+<option value="album">
+Our Album Songs
+</option>
+
+<option value="film">
+Film Songs
+</option>
+
+</select>
+
+</div>
+
+
+<div class="field">
+
+<label>
+ALBUM / LABEL
+</label>
+
+<input
+id="songAlbum"
+placeholder="5th Album / Film Song">
+
+</div>
+
+
+<div class="field">
+
+<label>
+RELEASE DATE
+</label>
+
+<input
+id="songDate"
+type="date">
+
+</div>
+
+
+<div class="field">
+
+<label>
+RELEASE TIME
+</label>
+
+<input
+id="songTime"
+type="time"
+value="16:00">
+
+</div>
+
+
+</div>
+
+
+<div class="field">
+
+<label>
+YOUTUBE LINK
+</label>
+
+<input
+id="songYoutube"
+placeholder="https://youtu.be/...">
+
+</div>
+
+
+<div class="field">
+
+<label>
+MP3 FILE URL
+</label>
+
+<input
+id="songMp3"
+placeholder="MP3 hosted URL">
+
+</div>
+
+
+<div class="field">
+
+<label>
+COVER IMAGE URL
+</label>
+
+<input
+id="songCover"
+placeholder="Image URL">
+
+</div>
+
+
+<button
+class="btn primary"
+id="addSongBtn">
+Add Release
+</button>
+
+
+<div
+class="message"
+id="songMessage">
+</div>
+
+
+</section>
+
+
+<!-- SONG LIST -->
+
+<section
+class="admin-card hidden"
+id="songManager">
+
+<h2>
+Manage Songs
+</h2>
+
+<div id="adminSongs"></div>
+
+</section>
+
+
+<!-- WEBSITE -->
+
+<section
+class="admin-card hidden"
+id="settingsPanel">
+
+<h2>
+Website Details
+</h2>
+
+
+<div class="field">
+
+<label>
+YOUTUBE CHANNEL
+</label>
+
+<input
+id="setYoutube"
+value="https://youtube.com/@smusic-official-25">
+
+</div>
+
+
+<div class="field">
+
+<label>
+EMAIL
+</label>
+
+<input
+id="setEmail"
+value="darkmusic101012@gmail.com">
+
+</div>
+
+
+<div class="field">
+
+<label>
+WHATSAPP
+</label>
+
+<input
+id="setWhatsapp"
+value="+94777990902">
+
+</div>
+
+
+<div class="field">
+
+<label>
+WEBSITE URL
+</label>
+
+<input
+id="setWebsite"
+value="https://abnfamily.github.io/s-music-official/">
+
+</div>
+
+
+<div class="field">
+
+<label>
+ABOUT TEXT
+</label>
+
+<textarea id="setAbout"></textarea>
+
+</div>
+
+
+<button
+class="btn primary"
+id="saveSettings">
+Save Website Details
+</button>
+
+
+</section>
+
+
+</div>
+
+
+<script>
+
+const PIN_KEY =
+"s_music_admin_pin";
+
+const DATA_KEY =
+"s_music_site_data";
+
+
+let data =
+JSON.parse(
+localStorage.getItem(DATA_KEY)
+||
+"null"
+);
+
+
+if(!data){
+
+data={
+songs:[],
+settings:{
+youtubeChannel:"https://youtube.com/@smusic-official-25",
+email:"darkmusic101012@gmail.com",
+whatsapp:"+94777990902",
+websiteUrl:"https://abnfamily.github.io/s-music-official/",
+aboutText:"S MUSIC OFFICIAL is a home for original music, artists, visual stories and new sounds."
+},
+updates:[]
+};
+
+}
+
+
+function $(id){
+return document.getElementById(id);
+}
+
+
+function save(){
+
+localStorage.setItem(
+DATA_KEY,
+JSON.stringify(data)
+);
+
+}
+
+
+function message(text){
+
+$("pinMessage").textContent =
+text;
+
+}
+
+
+function checkPin(){
+
+const pin =
+localStorage.getItem(PIN_KEY);
+
+if(pin){
+
+$("registerBox")
+.classList.add("hidden");
+
+$("loginBox")
+.classList.remove("hidden");
+
+}else{
+
+$("registerBox")
+.classList.remove("hidden");
+
+$("loginBox")
+.classList.add("hidden");
+
+}
+
+}
+
+
+function unlock(){
+
+$("pinCard")
+.classList.add("hidden");
+
+$("dashboard")
+.classList.remove("hidden");
+
+$("songManager")
+.classList.remove("hidden");
+
+$("settingsPanel")
+.classList.remove("hidden");
+
+renderSongs();
+
+$("setYoutube").value =
+data.settings.youtubeChannel;
+
+$("setEmail").value =
+data.settings.email;
+
+$("setWhatsapp").value =
+data.settings.whatsapp;
+
+$("setWebsite").value =
+data.settings.websiteUrl;
+
+$("setAbout").value =
+data.settings.aboutText;
+
+}
+
+
+$("registerBtn").onclick=()=>{
+
+const pin =
+$("newPin").value;
+
+const confirm =
+$("confirmPin").value;
+
+
+if(!/^\d{6}$/.test(pin)){
+
+message(
+"PIN must contain exactly 6 numbers."
+);
+
+return;
+
+}
+
+
+if(pin!==confirm){
+
+message(
+"PIN confirmation does not match."
+);
+
+return;
+
+}
+
+
+localStorage.setItem(
+PIN_KEY,
+pin
+);
+
+message(
+"PIN registered successfully."
+);
+
+checkPin();
+
+};
+
+
+$("loginBtn").onclick=()=>{
+
+const entered =
+$("loginPin").value;
+
+const saved =
+localStorage.getItem(PIN_KEY);
+
+
+if(entered===saved){
+
+unlock();
+
+}else{
+
+message(
+"Incorrect PIN."
+);
+
+}
+
+};
+
+
+$("logoutBtn").onclick=()=>{
+
+location.reload();
+
+};
+
+
+$("forgotBtn").onclick=()=>{
+
+message(
+"Forgot PIN recovery needs the secure backend/email service. GitHub Pages cannot safely send your private PIN by email."
+);
+
+};
+
+
+/* ADD SONG */
+
+$("addSongBtn").onclick=()=>{
+
+const title =
+$("songTitle").value.trim();
+
+const date =
+$("songDate").value;
+
+
+if(!title || !date){
+
+$("songMessage").textContent =
+"Song title and release date are required.";
+
+return;
+
+}
+
+
+const song={
+
+id:
+Date.now().toString(),
+
+title:title,
+
+artist:
+$("songArtist").value.trim()
+||"AB ROCKERZ",
+
+category:
+$("songCategory").value,
+
+albumLabel:
+$("songAlbum").value.trim()
+||"Release",
+
+releaseDate:date,
+
+releaseTime:
+$("songTime").value
+||"00:00",
+
+youtube:
+$("songYoutube").value.trim(),
+
+mp3:
+$("songMp3").value.trim(),
+
+cover:
+$("songCover").value.trim()
+
+};
+
+
+data.songs.push(song);
+
+save();
+
+$("songMessage").textContent =
+"Release added successfully.";
+
+renderSongs();
+
+$("songTitle").value="";
+$("songYoutube").value="";
+$("songMp3").value="";
+$("songCover").value="";
+
+};
+
+
+/* SONG LIST */
+
+function renderSongs(){
+
+const box =
+$("adminSongs");
+
+if(!data.songs.length){
+
+box.innerHTML =
+"<p>No songs added yet.</p>";
+
+return;
+
+}
+
+
+box.innerHTML =
+data.songs.map(song=>`
+
+<div class="admin-song">
+
+<div>
+
+<strong>
+${escapeHTML(song.title)}
+</strong>
+
+<small>
+${escapeHTML(song.category)}
+•
+${escapeHTML(song.releaseDate)}
+</small>
+
+</div>
+
+<button
+class="btn ghost"
+onclick="deleteSong('${song.id}')">
+Delete
+</button>
+
+</div>
+
+`).join("");
+
+}
+
+
+function escapeHTML(value){
+
+return String(value)
+.replace(/[&<>"']/g,char=>({
+
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#039;"
+
+}[char]));
+
+}
+
+
+function deleteSong(id){
+
+if(!confirm(
+"Delete this release?"
+))
+return;
+
+data.songs =
+data.songs.filter(
+song=>song.id!==id
+);
+
+save();
+
+renderSongs();
+
+}
+
+
+/* SETTINGS */
+
+$("saveSettings").onclick=()=>{
+
+data.settings.youtubeChannel =
+$("setYoutube").value.trim();
+
+data.settings.email =
+$("setEmail").value.trim();
+
+data.settings.whatsapp =
+$("setWhatsapp").value.trim();
+
+data.settings.websiteUrl =
+$("setWebsite").value.trim();
+
+data.settings.aboutText =
+$("setAbout").value.trim();
+
+save();
+
+alert(
+"Website details saved."
+);
+
+};
+
+
+/* START */
+
+checkPin();
+
+</script>
+
+</body>
+  </html>
