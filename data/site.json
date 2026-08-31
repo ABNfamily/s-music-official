@@ -1,1 +1,79 @@
-
+{
+  "settings": {
+    "brand": "S MUSIC OFFICIAL",
+    "tagline": "Original Music • Songs • Visuals",
+    "country": "Sri Lanka",
+    "announcement": "MARAYUM ETHIROZHI • TOMORROW • 4:00 PM • S MUSIC OFFICIAL",
+    "youtubeChannel": "https://youtube.com/@smusic-official-25",
+    "websiteUrl": "",
+    "email": "darkmusic101012@gmail.com",
+    "whatsapp": "+94777990902",
+    "logo": ""
+  },
+  "songs": [
+    {
+      "id": "bad-ah-mah",
+      "title": "BAD'AH MAH",
+      "artist": "AB ROCKERZ",
+      "category": "album",
+      "albumLabel": "1st Album",
+      "releaseDate": "2026-05-01",
+      "releaseTime": "00:00",
+      "status": "Released",
+      "description": "S MUSIC OFFICIAL album song.",
+      "cover": "",
+      "mp3": "",
+      "youtube": "https://youtu.be/rkR66Q2bkyY?si=laBVv5x1llHCzC8a",
+      "lyrics": ""
+    },
+    {
+      "id": "ullaara-vaada",
+      "title": "ULLAARA VAADA",
+      "artist": "AB ROCKERZ",
+      "category": "album",
+      "albumLabel": "3rd Album",
+      "releaseDate": "2026-06-23",
+      "releaseTime": "00:00",
+      "status": "Released",
+      "description": "Tamil original track with a cinematic love vibe.",
+      "cover": "",
+      "mp3": "",
+      "youtube": "https://youtu.be/rxNHABZc4zU?si=ttnijvvJRlbb2D3m",
+      "lyrics": ""
+    },
+    {
+      "id": "marayum-ethirozhi",
+      "title": "MARAYUM ETHIROZHI",
+      "artist": "AB ROCKERZ",
+      "category": "album",
+      "albumLabel": "4th Album",
+      "releaseDate": "2026-09-01",
+      "releaseTime": "16:00",
+      "status": "Upcoming",
+      "description": "4th album song — releasing September 1, 2026 at 4:00 PM.",
+      "cover": "",
+      "mp3": "",
+      "youtube": "",
+      "lyrics": ""
+    },
+    {
+      "id": "hbd-dangera-party-song",
+      "title": "HBD DANGERA (Party Song)",
+      "artist": "AB ROCKERZ",
+      "category": "film",
+      "albumLabel": "Film Songs",
+      "releaseDate": "2026-08-14",
+      "releaseTime": "00:00",
+      "status": "Released",
+      "description": "Official film song / party song.",
+      "cover": "",
+      "mp3": "",
+      "youtube": "https://youtu.be/kWqzfwXSKVE?si=-04bB14hrzkYE_dB",
+      "lyrics": ""
+    }
+  ],
+  "updates": [
+    {"id":"u-mar-1","date":"2026-08-31","title":"MARAYUM ETHIROZHI — TOMORROW AT 4:00 PM","body":"The 4th album song arrives on September 1, 2026 at 4:00 PM. Countdown is live on the home page.","tag":"UPCOMING"},
+    {"id":"u-hbd-1","date":"2026-08-14","title":"HBD DANGERA (PARTY SONG) RELEASED","body":"The film song is now available on YouTube.","tag":"RELEASE"}
+  ]
+}
